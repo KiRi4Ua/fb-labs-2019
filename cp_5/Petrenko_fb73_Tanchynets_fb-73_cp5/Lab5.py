@@ -98,13 +98,19 @@ def Sign(M,d,n):
 #print(gen_prime(10,50000000))
 #print(gen_prime_bit(256))
 generate_rsa(256)
-M=65489798486464
-C=crypt(M,openkey['e'],openkey['N'])
-print('\n',C)
-print('\n',decrypt(C,privatekey["d"],openkey['N']))
-M=97
-print("M: ",M ,'\n',"Signature: ", hex(Sign(M,privatekey['d'],openkey['N'])),'\n', "Module: ",hex(openkey['N']),'\n'      )
-
+#M=6548646
+M=6548648
 servkey['N'] = int(input("Servmodul:") , 16)
+C=crypt(M,openkey['e'],openkey['N'])
+print('\n',"C: ",hex(C),'\n')
+print("C_servmodul:",hex(crypt(M,servkey['E'],servkey['N'])),'\n')
+signature = Sign(  M  ,privatekey['d'], openkey['N'] )
+print("Signature:",hex(signature),'\n')
+print("S1:", hex(   crypt(  signature  , servkey['E'] , servkey['N']  )) ,'\n'  )
+print('\n',decrypt(C,privatekey["d"],openkey['N']))
+#M=97
+print("M: ",M ,'\n',"Signature: ", hex(Sign(M,privatekey['d'],openkey['N'])),'\n', "Module: ",hex(openkey['N']),'\n'      )
+print("E_hex:",hex(openkey['e']),'\n')
+
 podpis = int(input("Podpis:") , 16)
 print(crypt(podpis,servkey['E'],servkey['N']))
