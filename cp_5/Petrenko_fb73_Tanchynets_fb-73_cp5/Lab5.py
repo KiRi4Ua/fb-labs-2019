@@ -1,6 +1,8 @@
 import math, random
 
 openkey = {
+"e":65537,
+"N":0
 }
 privatekey = {
 "p":0,
@@ -11,6 +13,7 @@ servkey = {
 "N":0,
 "E":65537
 }
+
 def Milli_rabin(num,k = 50):
     if( num==3 or num==2 ):
         return True
@@ -85,22 +88,60 @@ def generate_rsa(bits):
     privatekey["q"]=q
     privatekey["p"]=p
 
-def crypt(M,e,n):
+def crypt(M , e = openkey["e"] ,n = openkey['N']):
     return pow(M,e,n)
 
-def decrypt(C,d,n):
+def decrypt(C , d = privatekey['d'] , n= openkey['N'] ):
     return pow(C,d,n)
 
-def Sign(M,d,n):
+def Sign(M , d = privatekey['d'],n = openkey['N']):
     return pow(M,d,n)
+
+def Verify(M , S , n ):
+    if(M == pow(S, openkey["e"], n ) ):
+        return True
+    else:
+        return False
+
+def SendKey(key , n1  ,e1 = servkey['E']  , d = privatekey['d'] , n =  openkey['N'] ):
+    #n1 = int( n1 , 16 )
+    print("Send key func:", '\n' )
+    key1 = hex( crypt(key , e1 , n1) )
+
+    S = hex( crypt( Sign(key, d , n ) , e1 , n1) )
+    return key1 , S
+
+def ResiveKey(key , S1 , n1 = servkey['N']  , e = openkey["e"]  , n =  openkey['N'] , d = privatekey['d']):
+    #n1 = int(n1 , 16)
+    #key = int(key , 16)
+    #S1 = int(S1 , 16)
+    key = decrypt(key , d , n )
+    Ver = Verify( key , decrypt(S1 , d , n ) , n1)
+    return key , Ver
+
 
 #print(Milli_rabin(2543766225 ,5000000))
 #print(gen_prime(10,50000000))
 #print(gen_prime_bit(256))
-generate_rsa(256)
+generate_rsa(512)
 #M=6548646
 M=6548648
+
+print( "Module: " , hex(openkey['N']), '\n'      )
+
+print( "Signature:" ,  hex(Sign(97 , privatekey['d'] , openkey['N'] )) , '\n' )
+
 servkey['N'] = int(input("Servmodul:") , 16)
+
+
+
+print( SendKey(M , servkey['N'], servkey['E'] , privatekey['d'] , openkey['N'] ) , '\n')
+
+key = int(input("Key:") , 16)
+signature= int(input("Signature:") , 16)
+print ( ResiveKey(key , signature , servkey['N'] , openkey["e"] , openkey['N'] , privatekey['d'] ) , '\n' )
+
+"""
 C=crypt(M,openkey['e'],openkey['N'])
 print('\n',"C: ",hex(C),'\n')
 print("C_servmodul:",hex(crypt(M,servkey['E'],servkey['N'])),'\n')
@@ -114,3 +155,4 @@ print("E_hex:",hex(openkey['e']),'\n')
 
 podpis = int(input("Podpis:") , 16)
 print(crypt(podpis,servkey['E'],servkey['N']))
+"""
