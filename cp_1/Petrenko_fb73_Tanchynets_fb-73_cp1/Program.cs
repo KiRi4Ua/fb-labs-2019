@@ -40,11 +40,11 @@ namespace ConsoleApp2
         {
             string Bigram;
             for (int i = 0; i < buffer.Length; i += 1 + Flag)
-            { //Â çàâèñèìîñòè îò çíà÷åíèÿ Flag èçìåíÿåòñÿ øàã
+            { 
                 if (Alph.count(buffer[i]) && Alph.count(buffer[i + 1]))
-                { // Åñëè Flag = 0 - áèãðàììû ïåðåñåêàþòñÿ
+                { 
                     Bigram.push_back(char.ToLower(buffer[i]));
-                    Bigram.push_back(char.ToLower(buffer[i + 1])); // Flag = 1 - áèãðàììû íå ïåðåñåêàþòñÿ
+                    Bigram.push_back(char.ToLower(buffer[i + 1])); 
                     if (BigramMap.count(Bigram))
                     {
                         BigramMap[Bigram] += 1;
@@ -151,7 +151,7 @@ namespace ConsoleApp2
             SortedSet<char> Alph = { 'à', 'À', 'á', 'Á', 'â', 'Â', 'ã', 'Ã', 'ä', 'Ä', 'å', 'Å', '¸', '¨', 'æ', 'Æ', 'ç', 'Ç', 'è', 'È', 'é', 'É', 'ê', 'Ê', 'ë', 'Ë', 'ì', 'Ì', 'í', 'Í', 'î', 'Î', 'ï', 'Ï', 'ð', 'Ð', 'ñ', 'Ñ', 'ò', 'Ò', 'ó', 'Ó', 'ô', 'Ô', 'õ', 'Õ', 'ö', 'Ö', '÷', '×', 'ø', 'Ø', 'ù', 'Ù', 'ú', 'Ú', 'û', 'Û', 'ü', 'Ü', 'ý', 'Ý', 'þ', 'Þ', 'ÿ', 'ß' };
 
 
-            Alph.Add(' '); //Adding space to set
+            Alph.Add(' '); 
 
 
             if (false)
@@ -169,22 +169,21 @@ namespace ConsoleApp2
                     Filter("..\\..\\original_text.txt", Alph, Destination);
                 }
             }
-            /*-----------------------------------------------------*/
-            /*------------- Ðàáîòà ñ ìîíîãðàììàìè -----------------*/
+           
             if (true)
             {
                 ifstream fin = new ifstream("..\\..\\original_text.txt");
-                //ifstream fin("..\\..\\Document.txt");
+                
                 int LettersCount = 0;
                 SortedDictionary<char, double> Letters = new SortedDictionary<char, double>();
                 if (fin.is_open())
                 {
                     string buffer;
                     while (fin.peek() != EOF)
-                    { //Ïðîñìàòðèâàåì, íî íå ñ÷èòûâàåì ïîñëåäóþùèé ñèìâîë
-                        getline(fin, buffer); //×òåíèå ôàéëà ïîñòðî÷íî
-                                              //cout << buffer << endl;	
-                        fin.seekg(fin.tellg()); // Ïåðåìåùåíèå êàðåòêè íà ïîçèöèþ ñëåäóþùóþ ïîñëå êîíöà ñòðîêè
+                    { 
+                        getline(fin, buffer); 
+                                              
+                        fin.seekg(fin.tellg()); 
                         mono(Letters, buffer, Alph, LettersCount);
                         buffer = "";
                     }
@@ -200,7 +199,7 @@ namespace ConsoleApp2
                 Console.Write("LettersCount: ");
                 Console.Write(LettersCount);
                 Console.Write("\n");
-                //cout << Count(Letters) << endl;
+                
                 double MonoEntropy;
                 MonoEntropy = MonogramEntropy(Letters, LettersCount);
 
@@ -214,7 +213,7 @@ namespace ConsoleApp2
                 Console.Write("*********************************************\n");
             }
 
-            /*------------------ Ðàáîòà ñ áèãðàììàìè ------------- */
+            
             if (true)
             {
                 SortedDictionary<string, double> BigramMap = new SortedDictionary<string, double>();
@@ -232,15 +231,15 @@ namespace ConsoleApp2
                 {
                     string buffer;
                     while (fin2.peek() != EOF)
-                    { //Ïðîñìàòðèâàåì, íî íå ñ÷èòûâàåì ïîñëåäóþùèé ñèìâîë
-                        getline(fin2, buffer); //×òåíèå ôàéëà ïîñòðî÷íî
-                                               //cout << buffer << endl;	
-                        fin2.seekg(fin2.tellg()); // Ïåðåìåùåíèå êàðåòêè íà ïîçèöèþ ñëåäóþùóþ ïîñëå êîíöà ñòðîêè
-                                                  //5-é ïàðàìåòð Flag; ïðè Flag = 0 - ïîäñ÷åò áèãðàìì ñ ïåðåñå÷åíèÿìè
-                                                  //						Flag = 1 - áåç ïåðåñå÷åíèé
-                                                  //cout << buffer << endl;
-                        duo(BigramMap, buffer, Alph, BigramCount, 1); //No space - 4.13; With Space - 3.96 : Intersection
-                        buffer = ""; //No space - 4.13; With Space - 3.96 : Without Intersection
+                    { 
+                        getline(fin2, buffer); 
+                                               	
+                        fin2.seekg(fin2.tellg()); 
+                                                  
+                                                  
+                                                  
+                        duo(BigramMap, buffer, Alph, BigramCount, 1); 
+                        buffer = ""; 
 
 
                     }
